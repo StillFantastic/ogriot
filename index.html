@@ -68,12 +68,8 @@
             <li class="nav-item" id="momo">
                 <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>2019-05-20-饅頭</span></a>
-            </li>
-            <li class="nav-item" id="meow">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>2019-05-21-妞妞</span></a>
+                    <span>2019-05-20-饅頭</span>
+                </a>
             </li>
 
 
@@ -297,7 +293,6 @@
                                 </div>
                             </div>
                         </div>
-                        <button id="test">Test</button>
                     </div>
 
 
@@ -368,37 +363,40 @@
     <script src="js/change.js"></script>
     <script>
         $(document).ready(function() {
-            $("#test").click(function() {
+            setInterval(call_php, 3000);
+
+            function call_php() {
                 $.ajax({
                     type: 'GET',
                     url: 'res.php',
-                    data: 'aa',
                     success: function(response) {
-                        alert(response);
+                        var res_json = JSON.parse(response);
+                        var path = res_json['path'];
+                        var name = res_json['name'];
+                        var count = res_json['count'];
+                        var tmp = res_json['tmp'];
+                        var mat = res_json['mat'];
+                        var hum = res_json['hum'];
+                        var obj = document.getElementById("pic");　　
+                        obj.src = path;
+                        var add_html = ['<li class="nav-item" id="momo">',
+                            '<a class="nav-link" href="#">',
+                            '<i class="fas fa-fw fa-chart-area">',
+                            '</i>',
+                            '<span>2019-05-20-' + name + '</span>',
+                            '</a>',
+                            '</li>'
+                        ].join(' ');
+                        $("#momo").append(add_html);
+                        $("#name").html("名稱：" + name);
+                        $("#temperature").html("溫度：" + tmp);
+                        $("#humidity").html("濕度：" + hum);
+                        $("#count").html("數量：" + count);
+                        $("#mature").html("成熟度：" + mat);
                     }
                 });
                 return false;
-            });
-        });
-        $("#meow").click(function() {
-            var imgSrc = "meow.jpg";
-            var obj = document.getElementById("pic");　　
-            obj.src = imgSrc;
-            $("#name").html("名稱 : 妞妞");
-            $("#temperature").html("溫度 : 24度");
-            $("#humidity").html("濕度 : 60%");
-            $("#count").html("數量 : 3顆");
-            $("#mature").html("成熟度：微熟")
-        });
-        $("#momo").click(function() {
-            var imgSrc = "test_up.jpg";
-            var obj = document.getElementById("pic");　　
-            obj.src = imgSrc;
-            $("#name").html("名稱 : 饅頭");
-            $("#temperature").html("溫度 : 30度");
-            $("#humidity").html("濕度 : 47%");
-            $("#count").html("數量 : 20顆");
-            $("#mature").html("成熟度：過熟")
+            }
         });
     </script>
 </body>
